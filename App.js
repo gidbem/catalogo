@@ -3,136 +3,86 @@ import {View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView, Stat
 import CardProduto from './CardProduto';
 
 const todosProdutos = [
-  // ✅ VÁLIDOS
+
   {
-    nome: 'Maçã Fuji',
-    preco: 7.99,
+    nome: 'Goiaba',
+    preco: 7.00,
     categoria: 'Frutas',
-    imagem: '',
+    imagem: 'https://img.cdndsgni.com/preview/11842278.jpg',
   },
   {
-    nome: 'Banana Prata',
-    preco: 4.5,
+    nome: 'Banana',
+    preco: 4.50,
     categoria: 'Frutas',
-    imagem: '',
+    imagem: 'https://png.pngtree.com/png-clipart/20220716/ourmid/pngtree-banana-yellow-fruit-banana-skewers-png-image_5944324.png',
   },
   {
     nome: 'Cenoura',
-    preco: 3.2,
+    preco: 3.20,
     categoria: 'Legumes',
-    imagem: '',
+    imagem: 'https://static.vecteezy.com/system/resources/thumbnails/020/943/780/small/three-fresh-orange-carrots-isolated-with-clipping-path-and-shadow-in-file-format-close-up-of-healthy-vegetable-root-with-full-focus-png.png',
   },
   {
-    nome: 'Chuchu',
-    preco: 2.8,
-    categoria: 'Legumes',
-    imagem: '',
+    nome: 'Abóbora',
+    preco: 2.80,
+    imagem: 'https://static.vecteezy.com/system/resources/thumbnails/026/772/936/small/halloween-pumpkin-with-ai-generated-free-png.png',
   },
   {
-    nome: 'Alface Crespa',
-    preco: 2.5,
+    nome: 'Alface',
+    preco: 2.50,
     categoria: 'Verduras',
-    imagem: '',
+    imagem: 'https://png.pngtree.com/png-vector/20250219/ourmid/pngtree-bright-green-curly-lettuce-illustration-png-image_15524635.png',
   },
   {
     nome: 'Espinafre',
-    preco: 3.9,
+    preco: 3.90,
     categoria: 'Verduras',
-    imagem: '',
+    imagem: 'https://static.vecteezy.com/system/resources/previews/045/808/083/non_2x/a-bunch-of-green-spinach-vegetables-isolated-on-a-transparent-background-free-png.png',
   },
   {
-    nome: 'Manga Palmer',
-    preco: 6.0,
+    nome: 'Manga',
+    preco: 6.00,
     categoria: 'Frutas',
-    imagem: '',
+    imagem: 'https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-mango-cut-in-half-png-image_10215981.png',
   },
-  {
-    nome: 'Rúcula',
-    preco: 3.1,
-    categoria: 'Verduras',
-    imagem: '',
-  },
- 
-  // ❌ INVÁLIDOS — serão filtrados pelo Filtro de Integridade
-  {
-    nome: 'Ab',           // ❌ Nome muito curto (menos de 3 caracteres)
-    preco: 5.0,
-    categoria: 'Frutas',
-    imagem: '',
-  },
-  {
-    nome: 'Batata Doce',
-    preco: -1.5,          // ❌ Preço negativo (não é maior que zero)
-    categoria: 'Legumes',
-    imagem: '',
-  },
-  {
-    nome: 'Pimenta',
-    preco: 4.0,
-    categoria: 'Condimentos', // ❌ Categoria inválida (não é Frutas, Legumes ou Verduras)
-    imagem: '',
-  },
-  {
-    nome: 'Uva Verde',
-    preco: 8.0,
-    categoria: 'Frutas',
-    imagem: null,             // ❌ Sem imagem
-  },
+
 ];
  
-// ─────────────────────────────────────────────────────────────
-// FILTRO DE INTEGRIDADE — Camada de Validação
-// Retorna null para itens que não cumprem os critérios.
-// O .map() renderiza null como nada na tela.
-// ─────────────────────────────────────────────────────────────
-function itemEhValido(produto) {
+function itemEValido(produto) {
   const categoriasPermitidas = ['Frutas', 'Legumes', 'Verduras'];
  
-  // 1. Nome deve ter pelo menos 3 caracteres
   if (!produto.nome || produto.nome.trim().length < 3) return false;
  
-  // 2. Preço deve ser um número maior que zero
   if (typeof produto.preco !== 'number' || produto.preco <= 0) return false;
- 
-  // 3. Categoria deve ser uma das três permitidas
+
   if (!categoriasPermitidas.includes(produto.categoria)) return false;
- 
-  // 4. Imagem deve existir
-  if (!produto.imagem) return false;
  
   return true;
 }
  
-// ─────────────────────────────────────────────────────────────
-// COMPONENTE PRINCIPAL
-// ─────────────────────────────────────────────────────────────
 export default function App() {
-  // useState controla qual categoria está ativa no momento
+
   const [categoriaAtiva, setCategoriaAtiva] = useState('Todos');
  
   const categorias = ['Todos', 'Frutas', 'Legumes', 'Verduras'];
  
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor="#2D6A4F" />
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#6a2d2d" />
  
-      {/* ── CABEÇALHO ── */}
       <View style={styles.header}>
-        <Text style={styles.headerEmoji}>🛒</Text>
-        <Text style={styles.headerTitulo}>Hortifruti</Text>
-        <Text style={styles.headerSubtitulo}>Catálogo Digital</Text>
+        <Text style={styles.titulo}>Hortifruti</Text>
       </View>
  
-      {/* ── BOTÕES DE FILTRO POR CATEGORIA ── */}
       <View style={styles.filtros}>
         {categorias.map((cat) => (
           <TouchableOpacity
             key={cat}
-            // Ao clicar, o estado da categoria ativa é atualizado
+
             onPress={() => setCategoriaAtiva(cat)}
             style={[
               styles.botaoFiltro,
-              // Se a categoria do botão é a ativa, aplica estilo diferente
+
               categoriaAtiva === cat && styles.botaoFiltroAtivo,
             ]}
           >
@@ -147,27 +97,19 @@ export default function App() {
           </TouchableOpacity>
         ))}
       </View>
- 
-      {/* ── LISTA DE PRODUTOS ──
-          Usamos ScrollView + .map() conforme especificado.
-          ScrollView permite scroll na lista de conteúdo.
-          FlatList NÃO é utilizada (conforme proibição do projeto).
-      ── */}
-      <ScrollView
+      <View
         contentContainerStyle={styles.lista}
         showsVerticalScrollIndicator={false}
       >
         {todosProdutos.map((produto, index) => {
-          // PASSO 1 — Filtro de Integridade: valida os dados do produto
-          if (!itemEhValido(produto)) return null;
+
+          if (!itemEValido(produto)) return null;
  
-          // PASSO 2 — Filtro de Categoria: verifica se pertence à categoria ativa
+
           if (categoriaAtiva !== 'Todos' && produto.categoria !== categoriaAtiva) {
             return null;
           }
  
-          // PASSO 3 — Se passou nas duas verificações, renderiza o CardProduto
-          // Os dados são passados ao componente filho via Props
           return (
             <CardProduto
               key={index}
@@ -179,44 +121,27 @@ export default function App() {
           );
         })}
  
-        {/* Espaço no final da lista para não cortar o último card */}
         <View style={{ height: 24 }} />
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
- 
-// ─────────────────────────────────────────────────────────────
-// ESTILOS
-// ─────────────────────────────────────────────────────────────
+
 const styles = StyleSheet.create({
-  safeArea: {
+  container: {
     flex: 1,
-    backgroundColor: '#F5F7F2',
+    backgroundColor: 'white',
   },
   header: {
-    backgroundColor: '#2D6A4F',
+    backgroundColor: '#6a2d2d',
     paddingTop: 20,
     paddingBottom: 20,
     alignItems: 'center',
   },
-  headerEmoji: {
-    fontSize: 32,
-    marginBottom: 4,
-  },
-  headerTitulo: {
+  titulo: {
     fontSize: 28,
-    fontWeight: '900',
     color: '#FFFFFF',
     letterSpacing: 1,
-  },
-  headerSubtitulo: {
-    fontSize: 13,
-    color: '#B7E4C7',
-    fontWeight: '400',
-    letterSpacing: 2,
-    textTransform: 'uppercase',
-    marginTop: 2,
   },
   filtros: {
     flexDirection: 'row',
@@ -231,27 +156,25 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 4,
     paddingVertical: 8,
-    borderRadius: 20,
     borderWidth: 1.5,
     borderColor: '#C8D8C0',
     alignItems: 'center',
     backgroundColor: 'transparent',
   },
   botaoFiltroAtivo: {
-    backgroundColor: '#2D6A4F',
-    borderColor: '#2D6A4F',
+    backgroundColor: '#6a2d2d',
+    borderColor: '#050505',
   },
   textoBotao: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#5A7A62',
+    color: '#7a645a',
   },
   textoBotaoAtivo: {
-    color: '#FFFFFF',
+    color: 'white',
   },
   lista: {
     paddingTop: 12,
   },
 });
  
-
